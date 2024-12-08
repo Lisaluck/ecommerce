@@ -1,0 +1,148 @@
+{% extends "limma/base.html" %}
+{% load static %}
+
+{% block title %}Cart{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4 ml-4">My Cart</p>
+        <hr>
+        <table>
+            <thead>
+                <tr>
+                    <th style="padding: 15px;">Sr.no</th>
+                    <th style="padding: 15px;">Image</th>
+                    <th style="padding: 15px;">Product Name</th>
+                    <th style="padding: 15px;">Quantity</th>
+                    <th style="padding: 15px;">Price</th>
+                    <th style="padding: 15px;">Decrease</th>
+                    <th style="padding: 15px;">Current Quantity</th>
+                    <th style="padding: 15px;">Increase</th>
+                    <th style="padding: 15px;">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cart in cart %}
+                <tr>
+                    <td style="padding: 10px;">{{ forloop.counter }}</td>
+                    <td style="padding: 10px;">
+                        <img style="height:80px; padding-right: 15px;" class="rounded-circle" src="{{ cart.product.image.url }}" alt="{{ cart.product.name }}">
+                    </td>
+                    <td style="padding: 10px;">{{ cart.product.name }}</td>
+                    <td style="padding: 10px;">{{ cart.quantity }}</td>
+                    <td style="padding: 10px;">Rs. {{ cart.product.price }}</td>
+                    <td style="padding: 10px;">
+                        <input type="button" pid="{{ cart.product.id }}" class="minus-cart btn btn-primary" value="-">
+                    </td>
+                    <td style="padding: 10px;">
+                        <span id="quantity">{{ cart.quantity }}</span>
+                    </td>
+                    <td style="padding: 10px;">
+                        <input type="button" pid="{{ cart.product.id }}" class="plus-cart btn btn-primary" value="+">
+                    </td>
+                    <td style="padding: 10px;">
+                        <input type="button" pid="{{ cart.product.id }}" class="btn btn-danger btn-sm remove-cart" value="Delete">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <hr>
+        <!-- Corrected Checkout Button -->
+        <div class="m-3 p-3">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-outline-info border rounded col-lg-3 float-right">Checkout</a>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Checkout</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          style="position: absolute; top: 10px; right: 10px; width: 1.5em; height: 1.5em; opacity: 1;">
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/checkout" method=POST>
+          {% csrf_token %}
+          <div class="form-group mt-3">
+              <label>Name</label>
+              <input required tpe="text" name="name" id="name" class="from-control" placeholder="Enter Your NAme ">
+          </div>
+          <div class="form-group mt-3">
+              <label>address</label>
+              <input required tpe="text" name="name" id="address" class="from-control" placeholder="Enter Your addrs ">
+          </div>
+          <div class="form-group mt-3">
+              <label>mobile no.</label>
+              <input required type="text" name="name" id="mobile" class="from-control" placeholder="Enter Your mobile no.">
+          </div>
+            <input type="submit" class="btn btn-outline-info border rounded col-lg-3 float-right mt-3 " value="Make Payment">
+          </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript Libraries -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<script>
+    // Function to increase quantity
+    $('.plus-cart').click(function() {
+        var id = $(this).attr("pid").toString();
+        console.log("Increase clicked for product ID: " + id);
+
+        $.ajax({
+            type: "GET",
+            url: "/plus_cart",
+            data: { prod_id: id },
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    });
+
+    // Function to decrease quantity
+    $('.minus-cart').click(function() {
+        var id = $(this).attr("pid").toString();
+        console.log("Decrease clicked for product ID: " + id);
+
+        $.ajax({
+            type: "GET",
+            url: "/minus_cart",
+            data: { prod_id: id },
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    });
+
+    // Function to remove from cart
+    $('.remove-cart').click(function() {
+        var id = $(this).attr("pid").toString();
+        console.log("Remove clicked for product ID: " + id);
+
+        $.ajax({
+            type: "GET",
+            url: "/remove_cart",
+            data: { prod_id: id },
+            success: function(data) {
+                console.log(data);
+                $(this).closest("tr").fadeOut();  // Use $(this) instead of mythis
+            }.bind(this)  // Bind this to ensure correct context
+        });
+    });
+</script>
+{% endblock %}

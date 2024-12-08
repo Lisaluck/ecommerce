@@ -1,0 +1,43 @@
+{% extends 'limma/base.html' %}
+{% block title %}customer signup{% endblock title %}
+{% block content %}
+<div class="container">
+
+    <div class="row my-3">
+        <div class="col-sm-6 offset-sm-3" >
+            <h3>customer signup
+                <form action="/signup" method="post" class="shadow p-5">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <p {% if message.tags %} class="alert-{{message.tags}} mb-5 from-control-sm " {% endif %}>{{message}}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% csrf_token %}
+                    {% if error %}
+                    <div class ="alert-alert-danger form-control-sm" role="alert">
+                        {{error}}
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="" class="form-control-lg">Name</label>
+                        <input type="text" name="name" id="" value="{{value.name}}" class="form-control" placeholder="enter ur name "></input>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="form-control-lg">mobile number</label>
+                        <input type="text" name="mobile" id=""  value="{{value.phone}}" class="form-control" placeholder="10 digit phone number in this block "></input>
+
+                    </div>
+                    <div class="form-group pt-4 ">
+                        <input class="btn btn-info btn-sm" type="submit" value="Signup">
+                    </div>
+                    <div class="text-center text-primary fw-bold">
+    <small class="form-control-sm">existing user  to eshop </small>
+    <a href="/login" class="text-danger">login</a>
+</div>
+                </form>
+
+</div>
+    </div>
+</div>
+{% endblock %}

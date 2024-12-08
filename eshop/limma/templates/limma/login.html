@@ -1,0 +1,30 @@
+{% extends 'limma/base.html' %}
+{% block title %}Customer Login{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row my-3">
+        <div class="col-sm-6 offset-sm-3">
+            <h3>Customer Login</h3>
+            <form action="/login" method="post" class="shadow p-5"> <!-- Change action to /login -->
+                {% csrf_token %}
+                {% if error %}
+                <div class="alert alert-danger form-control-sm" role="alert">
+                    {{ error }}
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="" class="form-control-lg">Mobile Number</label>
+                    <input type="text" name="phone" id="" value="{{ value.phone }}" class="form-control" placeholder="10 digit phone number in this block"> <!-- Change name to phone -->
+                </div>
+                <div class="form-group pt-4">
+                    <input class="btn btn-info btn-sm" type="submit" value="Login">
+                </div>
+                <div class="text-center text-primary fw-bold">
+                    <small class="form-control-sm">New user to eShop?</small>
+                    <a href="/signup" class="text-danger">Sign up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

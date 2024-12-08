@@ -1,0 +1,37 @@
+{% extends "limma/base.html" %}
+{% load static %}
+{%block title %}Cart{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4 ml-4">your order </p>
+        <hr>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>sno.</th>
+                <th>Image</th>
+                <th>Product name</th>
+                <th>Order Date</th>
+                <th>price</th>
+                <th>qty</th>
+                <th>status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in order %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td><img style="height: 80px;"class="rounded-circle" src="{{order.image.url}}"></td>
+                <td>{{order.product_name}}</td>
+                <td>{{order.ordered_date}}</td>
+                <td>{{order.price}}</td>
+                <td>{{order.qty}}</td>
+                <td>{{order.status}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
